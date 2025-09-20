@@ -1,71 +1,109 @@
-# House_price_prediction
-# 🏠 Bengaluru House Price Prediction
+# 🏡 Bengaluru House Price Prediction - ML Web App
 
-A machine learning web application that predicts real estate prices in Bengaluru, India, using user inputs such as square footage, number of bathrooms, BHK, and location. The model is trained on a real dataset and deployed with a Flask-based interface.
+## 🌟 Overview
 
----
-
-## 📁 Dataset
-
-- **Source**: [Kaggle - Bengaluru House Data](https://www.kaggle.com/datasets/amitabhajoy/bengaluru-house-price-data)
-- **Rows**: 13,320
-- **Key Features**: Location, Size (BHK), Total Sqft, Bath, Price
+This project aims to predict house prices in Bengaluru using machine learning, based on features like area (sqft), number of bedrooms, bathrooms, and location. The final solution is deployed as a web app using Flask.
 
 ---
 
-## 🧠 Features
+## 📊 Dataset Used
 
-- Predicts house prices in ₹ lakhs
-- Real-world dataset cleaning & processing
-- Model trained using Random Forest Regressor (R² ~ 0.94)
-- Clean and modern UI with dropdown selection for location
-- Deployed using Flask
-
----
-
-## 🔧 Tech Stack
-
-| Area           | Tools Used                                 |
-|----------------|---------------------------------------------|
-| Programming    | Python 3.x                                  |
-| Data Science   | Pandas, NumPy, Scikit-learn, Seaborn        |
-| Web Framework  | Flask                                       |
-| Frontend       | HTML5, CSS3, Google Fonts (Poppins)         |
-| Deployment     | Localhost (can be extended to Render/Heroku)|
+* **Name:** Bengaluru House Data
+* **Source:** [Kaggle](https://www.kaggle.com/datasets/amitabhajoy/bengaluru-house-price-data)
+* **Entries:** \~13,320
+* **Main Features:** `location`, `size`, `total_sqft`, `bath`, `price`
 
 ---
 
-## 📊 Model Performance
+## ⚖️ Tools & Technologies
 
-| Metric     | Score              |
-|------------|-------------------|
-| R² Score   | 0.945 ✅           |
-| MAE        | ₹1.61 lakhs ✅     |
-| RMSE       | ₹21.7 lakhs ✅     |
-
----
-
-## 📸 UI Screenshot
-
-> Replace the image URL with your own screenshot
-
-![Screenshot](https://via.placeholder.com/600x350?text=Prediction+UI+Screenshot)
+| Category         | Tools/Libraries                                          |
+| ---------------- | -------------------------------------------------------- |
+| Language         | Python                                                   |
+| Data Handling    | Pandas, NumPy                                            |
+| Visualization    | Matplotlib, Seaborn                                      |
+| Machine Learning | Scikit-learn (Linear Regression, Random Forest), XGBoost |
+| Model Saving     | Joblib                                                   |
+| Web Framework    | Flask                                                    |
+| Frontend         | HTML, Bootstrap (optional)                               |
 
 ---
 
-## 🛠️ Installation & Setup
+## 🪜 Data Preprocessing Steps
 
-```bash
-# 1. Clone the repository
-git clone https://github.com/yourusername/bengaluru-house-price-predictor.git
-cd bengaluru-house-price-predictor
+1. **Dropped unnecessary columns:** `area_type`, `availability`, `society`, `balcony`
+2. **Cleaned missing values**
+3. **Converted total\_sqft** (e.g., "2100-2850" → average)
+4. **Created derived features:**
 
-# 2. Create and activate a virtual environment (optional but recommended)
-python -m venv venv
-venv\Scripts\activate  # On Windows
+   * `bhk` from `size`
+   * `price_per_sqft`
+5. **Removed outliers:**
 
-# 3. Install dependencies
-pip install -r requirements.txt
+   * Properties with `total_sqft/bhk < 300`
+   * Price per sqft outliers (location-wise)
+   * Inconsistent BHK pricing within same location
+6. **One-hot encoded** the `location` feature (rare ones grouped under 'other')
 
-# 4. Run the Flask app
-python app.py
+---
+
+## 🤖 Model Comparison
+
+| Model             | R² Score   | MAE (Lakhs) | RMSE (Lakhs) |
+| ----------------- | ---------- | ----------- | ------------ |
+| Linear Regression | **0.8646** | 19.24       | **40.02**    |
+| Random Forest     | 0.8128     | **17.03**   | 47.05        |
+| XGBoost           | 0.7694     | 19.15       | 52.22        |
+
+### ✅ Final Model: **Linear Regression**
+
+* Best R² score
+* Simpler and generalizes well
+* Less overfitting vs tree models
+
+---
+
+## 💻 Web Application (Flask)
+
+### Features:
+
+* User inputs: total_sqft, bath, bhk, and location via form
+* Model input vector created dynamically with one-hot encoding
+* Predictions are displayed in UI
+* Errors and negative predictions handled safely
+
+### Files:
+
+* `app.py`: Flask backend logic
+* `index.html`: Frontend form (with dropdown for locations)
+* `bengaluru_price_model.pkl`: Trained model file
+* `model_columns.pkl`: Columns used for input encoding
+
+---
+
+## 🚀 Deployment Flow
+
+1. User fills form on web page
+2. Flask receives and processes input
+3. Trained model makes prediction
+4. Price is returned and shown
+
+---
+
+## 💡 Key Highlights
+
+* End-to-end ML pipeline: data cleaning → training → deployment
+* Cleaned and engineered structured data for better accuracy
+* Model safely handles unknown or missing input cases
+* Linear regression outperformed complex models due to robust preprocessing
+
+---
+
+## 🚀 Future Improvements
+
+* Add features like `furnishing_status`, `availability`
+* Perform hyperparameter tuning with `GridSearchCV`
+* Experiment with LightGBM, CatBoost
+* Deploy using Render/Streamlit/Heroku
+
+---
